@@ -17,8 +17,6 @@ class MainActivity : AppCompatActivity() {
         viewModel.shoppingList.observe(this) {
             Log.d(TAG, it.toString())
         }
-
-        viewModel.getShoppingList()
     }
 
     companion object {
