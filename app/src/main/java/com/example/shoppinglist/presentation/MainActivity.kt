@@ -30,16 +30,7 @@ class MainActivity : AppCompatActivity() {
         for (item in list) {
             val layoutId = if (item.enabled) R.layout.item_shop_enabled else R.layout.item_shop_disabled
             val view = LayoutInflater.from(this).inflate(layoutId, llShopList, false)
-            val tvName: TextView = view.findViewById(R.id.tv_name)
-            val tvCount: TextView = view.findViewById(R.id.tv_count)
 
-            tvName.text = item.name
-            tvCount.text = item.count.toString()
-
-            view.setOnLongClickListener {
-                viewModel.changeEnableState(item)
-                true
-            }
             llShopList.addView(view)
         }
     }
