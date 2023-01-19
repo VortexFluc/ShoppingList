@@ -1,6 +1,5 @@
 package com.example.shoppinglist.presentation
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.shoppinglist.data.ShopListRepositoryImpl
 import com.example.shoppinglist.domain.DeleteShoppingItemUseCase
@@ -23,8 +22,8 @@ class MainViewModel: ViewModel() {
     }
 
     fun changeEnableState(shoppingItem: ShoppingItem) {
-        var newShoppintItem = shoppingItem.copy(enabled = !shoppingItem.enabled)
-        editShoppingItemUseCase.editShoppingItem(newShoppintItem)
+        var newShoppingItem = shoppingItem.copy(enabled = !shoppingItem.enabled)
+        editShoppingItemUseCase.editShoppingItem(newShoppingItem)
     }
 
 }
