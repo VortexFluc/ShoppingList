@@ -16,12 +16,6 @@ import com.example.shoppinglist.domain.ShoppingItem
 import com.google.android.material.textfield.TextInputLayout
 
 class ShoppingItemActivity : AppCompatActivity() {
-    private lateinit var tilName: TextInputLayout
-    private lateinit var tilCount: TextInputLayout
-    private lateinit var etName: EditText
-    private lateinit var etCount: EditText
-    private lateinit var buttonSave: Button
-    private lateinit var viewModel: ShoppingItemViewModel
 
     private var screenMode = MODE_UNKNOWN
     private var shoppingItemId = ShoppingItem.UNDEFINED_ID
@@ -30,85 +24,16 @@ class ShoppingItemActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shopping_item)
         parseIntent()
-        viewModel = ViewModelProvider(this)[ShoppingItemViewModel::class.java]
-        initViews()
 
-        setupInputObservers()
-        setupFinishObserver()
-        when (screenMode) {
-            MODE_EDIT -> launchEditMode()
-            MODE_ADD -> launchAddMode()
+        val fragment = when (screenMode) {
+            MODE_EDIT -> ShoppingItemFragment.newInstanceEditItem(shoppingItemId)
+            MODE_ADD -> ShoppingItemFragment.newInstanceAddItem()
+            else -> throw RuntimeException("Unknown screen mode $screenMode")
         }
-    }
-
-    private fun setupInputObservers() {
-        viewModel.errorInputCount.observe(this) {
-            if (it) {
-                tilCount.error = getString(R.string.error_non_positive_count)
-            }
-        }
-
-        viewModel.errorInputName.observe(this) {
-            if (it) {
-                tilName.error = getString(R.string.error_name_not_empty)
-            }
-        }
-
-        etName.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.resetErrorInputName()
-                tilName.error = null
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-
-            }
-        })
-
-        etCount.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.resetErrorInputCount()
-                tilCount.error = null
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-
-            }
-        })
-    }
-
-    private fun launchEditMode() {
-        viewModel.shoppingItem.observe(this) {
-            etName.setText(it.name)
-            etCount.setText(it.count.toString())
-        }
-
-        buttonSave.setOnClickListener {
-            viewModel.changeShoppingItemData(etName.text.toString(), etCount.text.toString())
-        }
-
-        viewModel.getShoppingItem(shoppingItemId)
-
-    }
-
-    private fun launchAddMode() {
-        buttonSave.setOnClickListener {
-            viewModel.addShoppingItem(etName.text.toString(), etCount.text.toString())
-        }
-    }
-
-    private fun setupFinishObserver() {
-        viewModel.canClose.observe(this) {
-            finish()
-        }
+        supportFragmentManager
+            .beginTransaction()
+            .add(R.id.shop_item_container, fragment)
+            .commit()
     }
 
     private fun parseIntent() {
@@ -127,14 +52,6 @@ class ShoppingItemActivity : AppCompatActivity() {
             }
             shoppingItemId = intent.getIntExtra(EXTRA_SHOPPING_ITEM_ID, ShoppingItem.UNDEFINED_ID)
         }
-    }
-
-    private fun initViews() {
-        tilName = findViewById(R.id.til_name)
-        tilCount = findViewById(R.id.til_count)
-        etName = findViewById(R.id.et_name)
-        etCount = findViewById(R.id.et_count)
-        buttonSave = findViewById(R.id.buttonSave)
     }
 
     companion object {
