@@ -2,19 +2,14 @@ package com.example.shoppinglist.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoppinglist.R
-import com.example.shoppinglist.domain.ShoppingItem
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
-    private lateinit var adapter: ShoppingListAdapter
+    private lateinit var shoppingListAdapter: ShoppingListAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -22,14 +17,24 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView()
 
         viewModel.shoppingList.observe(this) {
-            adapter.shopList = it
+            shoppingListAdapter.shopList = it
         }
     }
 
     private fun setupRecyclerView() {
         val rvShopList: RecyclerView = findViewById(R.id.rv_shop_list)
-        adapter = ShoppingListAdapter()
-        rvShopList.adapter = adapter
+        shoppingListAdapter = ShoppingListAdapter()
+        with(rvShopList) {
+            adapter = shoppingListAdapter
+            recycledViewPool.setMaxRecycledViews(
+                ShoppingListAdapter.ITEM_ENABLED,
+                ShoppingListAdapter.MAX_POOL_SIZE
+            )
+            recycledViewPool.setMaxRecycledViews(
+                ShoppingListAdapter.ITEM_DISABLED,
+                ShoppingListAdapter.MAX_POOL_SIZE
+            )
+        }
     }
 
     companion object {

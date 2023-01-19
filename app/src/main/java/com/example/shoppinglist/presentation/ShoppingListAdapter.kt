@@ -22,7 +22,7 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.ShoppingIte
             LayoutInflater
                 .from(parent.context)
                 .inflate(
-                    R.layout.item_shop_disabled,
+                    viewType,
                     parent,
                     false
                 )
@@ -38,15 +38,11 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.ShoppingIte
             holder.itemView.setOnLongClickListener {
                 true
             }
-
-            if (item.enabled) {
-                holder.tvName.setTextColor(ContextCompat.getColor(holder.itemView.context, android.R.color.holo_red_light))
-            }
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return position
+        return if (shopList[position].enabled) ITEM_ENABLED else ITEM_DISABLED
     }
 
     override fun getItemCount(): Int = shopList.size
@@ -54,5 +50,12 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.ShoppingIte
     class ShoppingItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvName: TextView = view.findViewById(R.id.tv_name)
         val tvCount: TextView = view.findViewById(R.id.tv_count)
+    }
+
+    companion object {
+        const val ITEM_DISABLED = R.layout.item_shop_disabled
+        const val ITEM_ENABLED = R.layout.item_shop_enabled
+
+        const val MAX_POOL_SIZE = 15
     }
 }
