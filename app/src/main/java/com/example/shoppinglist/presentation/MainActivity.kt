@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView()
 
         viewModel.shoppingList.observe(this) {
-            shoppingListAdapter.shopList = it
+            shoppingListAdapter.submitList(it)
         }
     }
 
@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                viewModel.deleteShoppingItem(shoppingListAdapter.shopList[viewHolder.adapterPosition])
+                viewModel.deleteShoppingItem(shoppingListAdapter.currentList[viewHolder.adapterPosition])
             }
         }
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
