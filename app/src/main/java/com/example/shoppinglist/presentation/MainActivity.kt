@@ -7,32 +7,29 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import com.example.shoppinglist.R
 import com.example.shoppinglist.domain.ShoppingItem
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
-    private lateinit var llShopList: LinearLayout
+    private lateinit var adapter: ShoppingListAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        llShopList = findViewById(R.id.ll_shop_list)
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        setupRecyclerView()
 
         viewModel.shoppingList.observe(this) {
-            showList(it)
+            adapter.shopList = it
         }
     }
 
-    private fun showList(list: List<ShoppingItem>) {
-        llShopList.removeAllViews()
-        for (item in list) {
-            val layoutId = if (item.enabled) R.layout.item_shop_enabled else R.layout.item_shop_disabled
-            val view = LayoutInflater.from(this).inflate(layoutId, llShopList, false)
-
-            llShopList.addView(view)
-        }
+    private fun setupRecyclerView() {
+        val rvShopList: RecyclerView = findViewById(R.id.rv_shop_list)
+        adapter = ShoppingListAdapter()
+        rvShopList.adapter = adapter
     }
 
     companion object {
