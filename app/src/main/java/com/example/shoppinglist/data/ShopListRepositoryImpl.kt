@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.shoppinglist.domain.ShoppingItem
 import com.example.shoppinglist.domain.ShoppingListRepository
+import kotlin.random.Random
 
 object ShopListRepositoryImpl: ShoppingListRepository{
 
@@ -13,7 +14,7 @@ object ShopListRepositoryImpl: ShoppingListRepository{
 
     init {
         for (i in 0 until 1000) {
-            val item = ShoppingItem("Name $i", i, true)
+            val item = ShoppingItem("Name $i", i, Random.nextBoolean())
             addShoppingItem(item)
         }
     }
