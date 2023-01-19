@@ -1,24 +1,13 @@
 package com.example.shoppinglist.presentation
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import com.example.shoppinglist.R
 import com.example.shoppinglist.domain.ShoppingItem
 
-class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.ShoppingItemViewHolder>() {
-
-    var shopList = listOf<ShoppingItem>()
-        set(value) {
-            val callback = ShoppingListDiffCallback(field, value)
-            val diffResult = DiffUtil.calculateDiff(callback)
-            diffResult.dispatchUpdatesTo(this)
-            field = value
-        }
+class ShoppingListAdapter :
+    ListAdapter<ShoppingItem, ShoppingItemViewHolder>(ShoppingItemDiffCallback()) {
 
     var onShopItemLongClickListener: ((ShoppingItem) -> Unit)? = null
     var onShopItemClickListener: ((ShoppingItem) -> Unit)? = null
@@ -36,7 +25,7 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.ShoppingIte
     }
 
     override fun onBindViewHolder(holder: ShoppingItemViewHolder, position: Int) {
-        val item = shopList[position]
+        val item = getItem(position)
         val status = if (item.enabled) "Active" else "Innactive"
         with(holder) {
             tvName.text = "${item.name} $status"
@@ -53,14 +42,7 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.ShoppingIte
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (shopList[position].enabled) ITEM_ENABLED else ITEM_DISABLED
-    }
-
-    override fun getItemCount(): Int = shopList.size
-
-    class ShoppingItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val tvName: TextView = view.findViewById(R.id.tv_name)
-        val tvCount: TextView = view.findViewById(R.id.tv_count)
+        return if (getItem(position).enabled) ITEM_ENABLED else ITEM_DISABLED
     }
 
     companion object {
