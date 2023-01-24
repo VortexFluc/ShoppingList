@@ -23,8 +23,14 @@ class ShoppingItemActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shopping_item)
+        Log.d(TAG, "onCreate")
         parseIntent()
+        if (savedInstanceState == null) {
+            launchMode()
+        }
+    }
 
+    private fun launchMode() {
         val fragment = when (screenMode) {
             MODE_EDIT -> ShoppingItemFragment.newInstanceEditItem(shoppingItemId)
             MODE_ADD -> ShoppingItemFragment.newInstanceAddItem()
@@ -32,7 +38,7 @@ class ShoppingItemActivity : AppCompatActivity() {
         }
         supportFragmentManager
             .beginTransaction()
-            .add(R.id.shop_item_container, fragment)
+            .replace(R.id.shop_item_container, fragment)
             .commit()
     }
 
