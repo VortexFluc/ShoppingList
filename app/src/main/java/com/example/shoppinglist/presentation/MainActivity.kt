@@ -1,6 +1,7 @@
 package com.example.shoppinglist.presentation
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.ViewModelProvider
@@ -9,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.shoppinglist.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ShoppingItemFragment.OnEditingFinishedListener {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var shoppingListAdapter: ShoppingListAdapter
@@ -103,6 +104,12 @@ class MainActivity : AppCompatActivity() {
             startFragment(fragment)
         }
 
+    }
+
+
+    override fun onEditFinished() {
+        Toast.makeText(this@MainActivity, "Success!", Toast.LENGTH_SHORT).show()
+        supportFragmentManager.popBackStack()
     }
 
     private fun startFragment(fragment: ShoppingItemFragment) {

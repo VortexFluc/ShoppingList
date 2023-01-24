@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
@@ -15,7 +16,7 @@ import com.example.shoppinglist.R
 import com.example.shoppinglist.domain.ShoppingItem
 import com.google.android.material.textfield.TextInputLayout
 
-class ShoppingItemActivity : AppCompatActivity() {
+class ShoppingItemActivity : AppCompatActivity(), ShoppingItemFragment.OnEditingFinishedListener {
 
     private var screenMode = MODE_UNKNOWN
     private var shoppingItemId = ShoppingItem.UNDEFINED_ID
@@ -40,6 +41,11 @@ class ShoppingItemActivity : AppCompatActivity() {
             .beginTransaction()
             .replace(R.id.shop_item_container, fragment)
             .commit()
+    }
+
+    override fun onEditFinished() {
+        Toast.makeText(this@ShoppingItemActivity, "Success from shopping item activity", Toast.LENGTH_SHORT).show()
+        finish()
     }
 
     private fun parseIntent() {

@@ -1,7 +1,6 @@
 package com.example.shoppinglist.presentation
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,10 +10,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.example.shoppinglist.R
-import com.example.shoppinglist.domain.ShoppingItem
 import com.example.shoppinglist.domain.ShoppingItem.Companion.UNDEFINED_ID
 import com.google.android.material.textfield.TextInputLayout
 
@@ -29,6 +26,16 @@ class ShoppingItemFragment : Fragment() {
 
     private var screenMode: String = MODE_UNKNOWN
     private var shoppingItemId: Int = UNDEFINED_ID
+    private lateinit var onEditingFinishedListener: OnEditingFinishedListener
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnEditingFinishedListener) {
+            onEditingFinishedListener = context
+        } else {
+            throw RuntimeException("Activity must implement OnEditingFinishedListener")
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -122,7 +129,7 @@ class ShoppingItemFragment : Fragment() {
 
     private fun setupFinishObserver() {
         viewModel.canClose.observe(viewLifecycleOwner) {
-            activity?.onBackPressed()
+            onEditingFinishedListener?.onEditFinished()
         }
     }
 
@@ -155,6 +162,10 @@ class ShoppingItemFragment : Fragment() {
             etCount = findViewById(R.id.et_count)
             buttonSave = findViewById(R.id.buttonSave)
         }
+    }
+
+    interface OnEditingFinishedListener {
+        fun onEditFinished()
     }
 
     companion object {
