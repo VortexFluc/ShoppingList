@@ -94,22 +94,21 @@ class MainActivity : AppCompatActivity() {
     private fun setupLandClickListener() {
         shoppingListAdapter.onShopItemClickListener = {
             val fragment = ShoppingItemFragment.newInstanceEditItem(it.id)
-            startFragment(fragment)
+            startFragment(fragment, "edit")
         }
 
         fabAddItem = findViewById(R.id.fab_add_shop_item)
         fabAddItem.setOnClickListener {
             val fragment = ShoppingItemFragment.newInstanceAddItem()
-            startFragment(fragment)
+            startFragment(fragment, "add")
         }
 
     }
 
-    private fun startFragment(fragment: ShoppingItemFragment) {
-        supportFragmentManager.popBackStack()
+    private fun startFragment(fragment: ShoppingItemFragment, name: String) {
         supportFragmentManager.beginTransaction()
             .add(R.id.shop_item_container, fragment)
-            .addToBackStack(null)
+            .addToBackStack(name)
             .commit()
     }
 
@@ -119,6 +118,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        supportFragmentManager.popBackStack("add", 0)
+    }
 
     companion object {
         private const val TAG = "MainActivity"
