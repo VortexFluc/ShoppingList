@@ -177,7 +177,7 @@ class ShoppingItemFragment : Fragment() {
         fun newInstanceEditItem(shoppingItemId: Int): ShoppingItemFragment {
             return ShoppingItemFragment().apply {
                 arguments = Bundle().apply {
-                    putString(SCREEN_MODE, MODE_ADD)
+                    putString(SCREEN_MODE, MODE_EDIT)
                     putInt(SHOPPING_ITEM_ID, shoppingItemId)
                 }
             }
