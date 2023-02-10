@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.shoppinglist.R
 import com.example.shoppinglist.domain.ShoppingItem.Companion.UNDEFINED_ID
 import com.google.android.material.textfield.TextInputLayout
+import javax.inject.Inject
 
 class ShoppingItemFragment : Fragment() {
 
@@ -24,12 +25,16 @@ class ShoppingItemFragment : Fragment() {
     private lateinit var buttonSave: Button
     private lateinit var viewModel: ShoppingItemViewModel
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
     private var screenMode: String = MODE_UNKNOWN
     private var shoppingItemId: Int = UNDEFINED_ID
     private lateinit var onEditingFinishedListener: OnEditingFinishedListener
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        (requireActivity().application as ShoppingListApp).component.inject(this)
         if (context is OnEditingFinishedListener) {
             onEditingFinishedListener = context
         } else {
@@ -53,7 +58,7 @@ class ShoppingItemFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         parseParams()
-        viewModel = ViewModelProvider(this)[ShoppingItemViewModel::class.java]
+        viewModel = ViewModelProvider(this, viewModelFactory)[ShoppingItemViewModel::class.java]
         initViews(view)
         setupInputObservers()
         setupFinishObserver()

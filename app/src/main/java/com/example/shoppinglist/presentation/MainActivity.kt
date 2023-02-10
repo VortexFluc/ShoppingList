@@ -9,9 +9,12 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoppinglist.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), ShoppingItemFragment.OnEditingFinishedListener {
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
     private lateinit var viewModel: MainViewModel
     private lateinit var shoppingListAdapter: ShoppingListAdapter
     private lateinit var fabAddItem: FloatingActionButton
@@ -21,10 +24,11 @@ class MainActivity : AppCompatActivity(), ShoppingItemFragment.OnEditingFinished
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        (application as ShoppingListApp).component.inject(this)
         shopItemContainer = findViewById(R.id.shop_item_container)
 
 
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        viewModel = ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
         setupRecyclerView()
 
         viewModel.shoppingList.observe(this) {
