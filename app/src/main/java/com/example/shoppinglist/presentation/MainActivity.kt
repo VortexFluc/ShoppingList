@@ -1,5 +1,6 @@
 package com.example.shoppinglist.presentation
 
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -34,6 +35,14 @@ class MainActivity : AppCompatActivity(), ShoppingItemFragment.OnEditingFinished
         viewModel.shoppingList.observe(this) {
             shoppingListAdapter.submitList(it)
         }
+
+        contentResolver.query(
+            Uri.parse("content://com.example.shoppinglist/shop_items"),
+            null,
+            null,
+            null,
+            null
+        )
     }
 
     private fun isLandMode() = shopItemContainer != null
