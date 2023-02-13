@@ -1,5 +1,6 @@
 package com.example.shoppinglist.data
 
+import android.database.Cursor
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
@@ -10,6 +11,9 @@ import androidx.room.Query
 interface ShoppingListDao {
     @Query("SELECT * FROM shopping_items")
     fun getShopingList(): LiveData<List<ShoppingItemDbModel>>
+
+    @Query("SELECT * FROM shopping_items")
+    fun getShopingListCursor(): Cursor
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addShoppingItem(shoppingItemDbModel: ShoppingItemDbModel)
