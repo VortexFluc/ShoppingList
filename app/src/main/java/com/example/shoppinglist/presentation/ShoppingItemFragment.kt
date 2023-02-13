@@ -122,7 +122,20 @@ class ShoppingItemFragment : Fragment() {
         }
 
         buttonSave.setOnClickListener {
-            viewModel.changeShoppingItemData(etName.text.toString(), etCount.text.toString())
+//            viewModel.changeShoppingItemData(etName.text.toString(), etCount.text.toString())
+            thread {
+                context?.contentResolver?.update(
+                    Uri.parse("content://com.example.shoppinglist/shop_items"),
+                    ContentValues().apply {
+                        put("id", shoppingItemId)
+                        put("name", etName.text.toString())
+                        put("count", etCount.text.toString().toInt())
+                        put("enabled", true)
+                    },
+                    null,
+                    null
+                )
+            }
         }
 
         viewModel.getShoppingItem(shoppingItemId)

@@ -103,7 +103,15 @@ class MainActivity : AppCompatActivity(), ShoppingItemFragment.OnEditingFinished
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                viewModel.deleteShoppingItem(shoppingListAdapter.currentList[viewHolder.adapterPosition])
+//                viewModel.deleteShoppingItem(shoppingListAdapter.currentList[viewHolder.adapterPosition])
+                val item = shoppingListAdapter.currentList[viewHolder.adapterPosition]
+                thread {
+                    contentResolver.delete(
+                        Uri.parse("content://com.example.shoppinglist/shop_items"),
+                        null,
+                        arrayOf(item.id.toString())
+                    )
+                }
             }
         }
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)

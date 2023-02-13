@@ -24,6 +24,9 @@ interface ShoppingListDao {
     @Query("DELETE FROM shopping_items WHERE id = :shoppingItemId")
     suspend fun deleteShoppingItem(shoppingItemId: Int)
 
+    @Query("DELETE FROM shopping_items WHERE id = :shoppingItemId")
+    fun deleteShoppingItemSync(shoppingItemId: Int): Int
+
     @Query("SELECT * FROM shopping_items WHERE id = :shoppingItemId LIMIT 1")
     suspend fun getShoppingItem(shoppingItemId: Int): ShoppingItemDbModel
 }
