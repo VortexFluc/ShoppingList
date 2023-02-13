@@ -43,6 +43,22 @@ class MainActivity : AppCompatActivity(), ShoppingItemFragment.OnEditingFinished
             null,
             null
         )
+
+        contentResolver.query(
+            Uri.parse("content://com.example.shoppinglist/shop_items/3"),
+            null,
+            null,
+            null,
+            null
+        )
+
+        contentResolver.query(
+            Uri.parse("content://com.example.shoppinglist/shop_items/John"),
+            null,
+            null,
+            null,
+            null
+        )
     }
 
     private fun isLandMode() = shopItemContainer != null
