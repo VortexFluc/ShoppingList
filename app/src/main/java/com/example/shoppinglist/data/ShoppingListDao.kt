@@ -18,6 +18,9 @@ interface ShoppingListDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addShoppingItem(shoppingItemDbModel: ShoppingItemDbModel)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addShoppingItemSync(shoppingItemDbModel: ShoppingItemDbModel)
+
     @Query("DELETE FROM shopping_items WHERE id = :shoppingItemId")
     suspend fun deleteShoppingItem(shoppingItemId: Int)
 

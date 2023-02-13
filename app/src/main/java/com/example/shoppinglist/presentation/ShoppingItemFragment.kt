@@ -1,6 +1,8 @@
 package com.example.shoppinglist.presentation
 
+import android.content.ContentValues
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -15,6 +17,7 @@ import com.example.shoppinglist.R
 import com.example.shoppinglist.domain.ShoppingItem.Companion.UNDEFINED_ID
 import com.google.android.material.textfield.TextInputLayout
 import javax.inject.Inject
+import kotlin.concurrent.thread
 
 class ShoppingItemFragment : Fragment() {
 
@@ -128,7 +131,18 @@ class ShoppingItemFragment : Fragment() {
 
     private fun launchAddMode() {
         buttonSave.setOnClickListener {
-            viewModel.addShoppingItem(etName.text.toString(), etCount.text.toString())
+//            viewModel.addShoppingItem(etName.text.toString(), etCount.text.toString())
+            thread {
+                context?.contentResolver?.insert(
+                    Uri.parse("content://com.example.shoppinglist/shop_items"),
+                    ContentValues().apply {
+                        put("id", 0)
+                        put("name", etName.text.toString())
+                        put("count", etCount.text.toString().toInt())
+                        put("enabled", true)
+                    }
+                )
+            }
         }
     }
 
